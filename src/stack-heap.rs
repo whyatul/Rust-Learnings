@@ -24,8 +24,10 @@ fn heap_fn(){
 fn updated_string(){
     let mut s = String::from("Initial String");
     println!("Before Update: {}",s );
+    println!("Capacity: {}, Length: {}, Pointer:{:p}",s.capacity(),s.len(),s.as_ptr() );
 
     //Appended Some text to the string
     s.push_str("And Some Additional Text");
     println!("After Appending {}",s);
+    println!("Capacity: {}, Length: {}, Pointer:{:p}",s.capacity(),s.len(),s.as_ptr() );
 }
