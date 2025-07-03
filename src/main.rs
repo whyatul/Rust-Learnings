@@ -9,7 +9,7 @@ fn main() {
     let is_male:bool = true;
     let is_18:bool = true;
 
-    if(is_male){
+    if is_male {
         println!("The value of male");
     }
     else{
