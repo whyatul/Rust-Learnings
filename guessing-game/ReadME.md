@@ -1,6 +1,7 @@
 # Guessing Game in Rust
 
-A scommand‑line based guessing game. It started as a simple exercise and became a handy playground to understand mutability, shadowing, pattern matching, and using external crates.
+A command‑line based guessing game.
+It started as a simple exercise and became a handy playground to understand mutability, shadowing, pattern matching, and using external crates.
 
 ## What I've Learned
 
@@ -30,7 +31,7 @@ A scommand‑line based guessing game. It started as a simple exercise and becam
 
 - Read input: `io::stdin().read_line(&mut guess)` (mutable reference so the buffer can be changed)
 - Trim: remove newline before parsing
-- Output: `println!` with inline formatting: `println!("You guessed: {guess}");`
+- Output: `println!` with multiple inline formatted variables: `println!("The number gussed by {name}: {guess}");`
 
 ### 5. Error Handling and Control Flow
 
@@ -44,9 +45,11 @@ A scommand‑line based guessing game. It started as a simple exercise and becam
 - Secret number: `rand::rng().random_range(1..=100)` (newer API style)
 - Trait import brings the method into scope
 
-### 7. Comparison and Ordering
+### 7. Comparison, Ordering, and Advanced Pattern Matching
 
 - `cmp` returns `Ordering` which is matched for feedback
+- Used primitive numeric methods like `abs_diff` to safely calculate absolute differences between unsigned integers
+- Used advanced `match` arms with ranges (e.g., `1..=3`, `4..=10`) to provide contextual, distance-based hints
 
 ### 8. Ownership, Borrowing, Safety (Light Intro)
 
@@ -88,16 +91,34 @@ let secret_number = rand::rng().random_range(1..=100);
             }
         };
         
-        println!("You guessed: {guess}");
+        println!("The number gussed by {name}: {guess}");
 
-        match guess.cmp(&secret_number){
-            Ordering::Less => println!("{guess} is too small!"),
+        match guess.cmp(&secret_number) {
             Ordering::Equal => {
                 println!("You win! {guess} is correct!");
                 println!("The secret number was {secret_number}");
                 break;
-            },
-            Ordering::Greater=> println!("{guess} is too big!"),
+            }
+            Ordering::Less => {
+                let diff = guess.abs_diff(secret_number);
+                let hint = match diff {
+                    1..=3 => "You are very close!",
+                    4..=10 => "You are close!",
+                    11..=20 => "You are far away!",
+                    _ => "You are very far away!",
+                };
+                println!("{hint}");
+            }
+            Ordering::Greater => {
+                let diff = guess.abs_diff(secret_number);
+                let hint = match diff {
+                    1..=3 => "You are very close!",
+                    4..=10 => "You are close!",
+                    11..=20 => "You are far away!",
+                    _ => "You are very far away!",
+                };
+                println!("{hint}");
+            }
         }
     }
 ```
